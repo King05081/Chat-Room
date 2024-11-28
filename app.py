@@ -1,6 +1,5 @@
 from flask import Flask,render_template,request
 from flask_socketio import SocketIO, emit
-
 import random
 
 app = Flask(__name__)
@@ -19,7 +18,7 @@ def handle_connect():
     username = f"User_{random.randint(1000,9999)}"
     gender = random.choice(["girl","boy"])
     # https://avatar.iran.liara.run/public/boy?username=User_123
-    avatar_url = f"https://api.dicebear.com/9.x/bottts-neutral/svg?seed={username}"
+    avatar_url = f" https://avatar.iran.liara.run/public/{gender}?username={username}"
 
     users[request.sid] = { "username":username,"avatar":avatar_url}
 
@@ -38,11 +37,10 @@ def handle_disconnect():
 def handle_message(data):
     user = users.get(request.sid)
     if user:
-        
         emit("new_message", {
-            "username": user["username"],
-            "avatar": user["avatar"],
-            "message": data["message"]
+            "username":user["username"],
+            "avatar":user["avatar"],
+            "message":data["message"]
         }, broadcast=True)
 
 @socketio.on("update_username")
