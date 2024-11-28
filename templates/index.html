@@ -304,7 +304,9 @@
 			});
 
 			socket.on("new_message", (data) => {
-				addMessage(data.message, "user", data.username, data.avatar);
+				addMessage(data.message, "user", data.username, data.avatar, data.timestamp);
+			});
+
 			});
 
 			socket.on("username_updated", (data) => {
