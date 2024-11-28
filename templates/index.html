@@ -160,19 +160,7 @@
 		    margin-left: 10px;
 		}
 
-		.message-header {
-		    display: flex;
-		    justify-content: space-between;
-		    align-items: center;
-		    font-size: 12px;
-		    color: var(--system-message-color);		
-		}
-			
-		.message-timestamp {
-		    margin-left: 10px;
-		    font-size: 10px;
-		    color: #888;
-		}
+		
 		
 		/* Media Queries for Mobile Responsiveness */
 		@media screen and (max-width: 768px) {
@@ -306,7 +294,7 @@
 			});
 
 			socket.on("new_message", (data) => {
-				addMessage(data.message, "user", data.username, data.avatar, data.timestamp);
+				addMessage(data.message, "user", data.username, data.avatar);
 			});
 
 			});
@@ -342,7 +330,7 @@
 				}
 			}
 
-			function addMessage(message, type, username = "", avatar = "", timestamp = "") {
+			function addMessage(message, type, username = "", avatar = "") {
 				const messageElement = document.createElement("div");
 				messageElement.className = "message";
 				
