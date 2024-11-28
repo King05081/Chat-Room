@@ -1,13 +1,15 @@
 import eventlet
-eventlet.monkey_patch()
+eventlet.monkey_patch()  # This must come before all other imports
 
-from flask import Flask,render_template,request
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
 import random
+
 import datetime
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode="threading")
+
 
 # python dict. Store connected users. Key is socket id, value is username and avatarUrl 
 users = {}
