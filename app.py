@@ -15,7 +15,7 @@ def index():
 # we're listening for the connect event
 @socketio.on("connect")
 def handle_connect():
-    username = f"User_{random.randint(1000,9999)}"
+    username = f"User_{random.randint(100,9999)}"
     gender = random.choice(["girl","boy"])
     # https://avatar.iran.liara.run/public/boy?username=User_123
     avatar_url = f"https://api.dicebear.com/9.x/bottts-neutral/svg?seed={username}"
