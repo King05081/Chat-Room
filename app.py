@@ -9,14 +9,12 @@ import datetime
 app = Flask(__name__)
 socketio = SocketIO(app)  # Use eventlet async mode
 
-
-# python dict. Store connected users. Key is socket id, value is username and avatarUrl 
-users = {}
-
-@app.route('/', methods=["GET", "HEAD"])
+@app.route('/')
 def index():
     return render_template('index.html')  # Removed undefined variable
 
+# python dict. Store connected users. Key is socket id, value is username and avatarUrl 
+users = {}
 
 # we're listening for the connect event
 @socketio.on("connect")
