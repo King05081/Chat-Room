@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
 import random
+import uuid
 from datetime import datetime
 
 app = Flask(__name__)
@@ -35,7 +36,7 @@ def handle_disconnect():
 def handle_message(data):
     user = users.get(request.sid)
     if user:
-        message_id = len(messages) + 1
+        message_id = str(uuid.uuid4())  # Generate a unique ID for each message
         timestamp = datetime.now().strftime("%I:%M %p")
         message_data = {
             "id": message_id,
@@ -54,6 +55,10 @@ def handle_reaction(data):
     message_id = data.get("message_id")
     emoji = data.get("emoji")
     user = users.get(request.sid)
+
+    if not message_id or not emoji:
+        emit("error", {"message": "Invalid reaction data"}, room=request.sid)
+        return
 
     if message_id in messages and user:
         message = messages[message_id]
