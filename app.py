@@ -16,7 +16,8 @@ users = {}
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', some_variable=value)
+
 
 # we're listening for the connect event
 @socketio.on("connect")
