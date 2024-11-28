@@ -1,5 +1,6 @@
 from flask import Flask,render_template,request
 from flask_socketio import SocketIO, emit
+from datetime import datetime
 import random
 
 app = Flask(__name__)
@@ -37,10 +38,12 @@ def handle_disconnect():
 def handle_message(data):
     user = users.get(request.sid)
     if user:
+        timestamp = datetime.now().strftime("%I:%M %p")  # Format time as HH:MM AM/PM
         emit("new_message", {
             "username":user["username"],
             "avatar":user["avatar"],
-            "message":data["message"]
+            "message":data["message"],
+            "timestamp": timestamp
         }, broadcast=True)
 
 @socketio.on("update_username")
