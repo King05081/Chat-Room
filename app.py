@@ -4,6 +4,7 @@ eventlet.monkey_patch()
 from flask import Flask,render_template,request
 from flask_socketio import SocketIO, emit
 import random
+import datetime
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -40,10 +41,12 @@ def handle_disconnect():
 def handle_message(data):
     user = users.get(request.sid)
     if user:
+        timestamp = datetime.datetime.now().strftime("%H:%M:%S")  # Format as HH:MM:SS
         emit("new_message", {
             "username":user["username"],
             "avatar":user["avatar"],
             "message":data["message"]
+            "timestamp": timestamp
         }, broadcast=True)
 
 @socketio.on("update_username")
