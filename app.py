@@ -40,9 +40,9 @@ def handle_message(data):
     if user:
         timestamp = datetime.now().strftime("%I:%M %p")  # Format time as HH:MM AM/PM
         emit("new_message", {
-            "username":user["username"],
-            "avatar":user["avatar"],
-            "message":data["message"],
+            "username": user["username"],
+            "avatar": user["avatar"],
+            "message": data["message"],
             "timestamp": timestamp
         }, broadcast=True)
 
