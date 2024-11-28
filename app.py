@@ -1,76 +1,58 @@
-from flask import Flask, render_template, request
+from flask import Flask,render_template,request
 from flask_socketio import SocketIO, emit
 import random
-import uuid
-from datetime import datetime
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-users = {}  # Store connected users: key is socket ID, value is user data
-messages = {}  # Store messages with their reactions
+# python dict. Store connected users. Key is socket id, value is username and avatarUrl 
+users = {}
 
-
-@app.route("/")
+@app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template('index.html')
 
-
+# we're listening for the connect event
 @socketio.on("connect")
 def handle_connect():
-    username = f"User_{random.randint(1000, 9999)}"
-    avatar_url = f"https://api.dicebear.com/9.x/bottts-neutral/svg?seed={username}"
-    users[request.sid] = {"username": username, "avatar": avatar_url}
-    emit("user_joined", {"username": username, "avatar": avatar_url}, broadcast=True)
-    emit("set_username", {"username": username})
+    username = f"User_{random.randint(1000,9999)}"
+    gender = random.choice(["girl","boy"])
+    # https://avatar.iran.liara.run/public/boy?username=User_123
+    avatar_url = f" https://avatar.iran.liara.run/public/{gender}?username={username}"
 
+    users[request.sid] = { "username":username,"avatar":avatar_url}
+
+    emit("user_joined", {"username":username,"avatar":avatar_url},broadcast=True)
+
+    emit("set_username", {"username":username})
 
 @socketio.on("disconnect")
 def handle_disconnect():
     user = users.pop(request.sid, None)
     if user:
-        emit("user_left", {"username": user["username"]}, broadcast=True)
+      emit("user_left", {"username":user["username"]},broadcast=True)
 
 
 @socketio.on("send_message")
 def handle_message(data):
     user = users.get(request.sid)
     if user:
-        message_id = str(uuid.uuid4())  # Generate a unique ID for each message
-        timestamp = datetime.now().strftime("%I:%M %p")
-        message_data = {
-            "id": message_id,
-            "username": user["username"],
-            "avatar": user["avatar"],
-            "message": data["message"],
-            "timestamp": timestamp,
-            "reactions": {},  # Store reactions as {emoji: [usernames]}
-        }
-        messages[message_id] = message_data
-        emit("new_message", message_data, broadcast=True)
+        emit("new_message", {
+            "username":user["username"],
+            "avatar":user["avatar"],
+            "message":data["message"]
+        }, broadcast=True)
 
+@socketio.on("update_username")
+def handle_update_username(data):
+    old_username = users[request.sid]["username"]
+    new_username = data["username"]
+    users[request.sid]["username"] = new_username
 
-@socketio.on("add_reaction")
-def handle_reaction(data):
-    message_id = data.get("message_id")
-    emoji = data.get("emoji")
-    user = users.get(request.sid)
-
-    if not message_id or not emoji:
-        emit("error", {"message": "Invalid reaction data"}, room=request.sid)
-        return
-
-    if message_id in messages and user:
-        message = messages[message_id]
-        username = user["username"]
-
-        if emoji not in message["reactions"]:
-            message["reactions"][emoji] = []
-        if username not in message["reactions"][emoji]:
-            message["reactions"][emoji].append(username)
-
-        emit("update_message", message, broadcast=True)
-
+    emit("username_updated", {
+        "old_username":old_username,
+        "new_username":new_username
+    }, broadcast=True)
 
 if __name__ == "__main__":
-    socketio.run(app)
+    socketio.run(app) 
