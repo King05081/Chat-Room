@@ -9,7 +9,7 @@ import datetime
 app = Flask(__name__)
 socketio = SocketIO(app)  # Use eventlet async mode
 
-@app.route('/')
+@app.route('/', methods=["GET", "HEAD"])
 def index():
     return render_template('index.html')  # Removed undefined variable
 
