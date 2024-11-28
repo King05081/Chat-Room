@@ -13,7 +13,7 @@ socketio = SocketIO(app)  # Use eventlet async mode
 # python dict. Store connected users. Key is socket id, value is username and avatarUrl 
 users = {}
 
-@app.route('/')
+@app.route('/', methods=["GET", "HEAD"])
 def index():
     return render_template('index.html')  # Removed undefined variable
 
