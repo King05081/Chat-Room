@@ -110,6 +110,7 @@
 
         .reaction:hover {
             background-color: var(--primary-light);
+            transform: scale(1.1);
         }
 
         .reaction-button {
@@ -205,6 +206,8 @@
         }
 
         function addMessage(data) {
+            const isScrolledToBottom = chatMessages.scrollHeight - chatMessages.scrollTop === chatMessages.clientHeight;
+
             const messageElement = document.createElement("div");
             messageElement.className = "message";
             messageElement.dataset.messageId = data.id;
@@ -259,10 +262,12 @@
             messageElement.appendChild(contentDiv);
 
             chatMessages.appendChild(messageElement);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            if (isScrolledToBottom) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
         }
     </script>
 </body>
 </html>
-
 
