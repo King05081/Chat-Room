@@ -158,6 +158,96 @@
 				margin-right: 0;
 				margin-left: 10px;
 			}
+
+			/* Media Queries for Mobile Responsiveness */
+			@media screen and (max-width: 768px) {
+				.chat-container {
+					margin: 10px;
+					border-radius: 10px;
+				}
+
+				.chat-header {
+					font-size: 20px;
+					padding: 15px;
+				}
+
+				.chat-messages {
+					padding: 10px;
+					height: 300px;
+				}
+
+				.message-content {
+					font-size: 14px;
+					padding: 10px;
+				}
+
+				.message-username {
+					font-size: 12px;
+				}
+
+				.message img {
+					width: 30px;
+					height: 30px;
+				}
+
+				.chat-input,
+				.username-container {
+					flex-wrap: wrap;
+					padding: 10px;
+				}
+
+				#message-input,
+				#username-input {
+					font-size: 14px;
+					padding: 8px;
+					margin: 5px 0;
+				}
+
+				#send-button,
+				#update-username-button {
+					padding: 10px 15px;
+					font-size: 14px;
+				}
+
+				.system-message {
+					font-size: 12px;
+				}
+			}
+
+			@media screen and (max-width: 480px) {
+				.chat-header {
+					font-size: 18px;
+					padding: 10px;
+				}
+
+				.chat-messages {
+					height: 250px;
+				}
+
+				.message-content {
+					font-size: 12px;
+					padding: 8px;
+				}
+
+				.message-username {
+					font-size: 10px;
+				}
+
+				#message-input,
+				#username-input {
+					font-size: 12px;
+				}
+
+				#send-button,
+				#update-username-button {
+					padding: 8px 12px;
+					font-size: 12px;
+				}
+
+				.message img {
+					display: none;
+				}
+			}
 		</style>
 	</head>
 	<body>
@@ -176,6 +266,7 @@
 		</div>
 
 		<script>
+			// The JavaScript code remains unchanged as it doesn't need adjustments for responsiveness
 			const socket = io();
 			const chatMessages = document.getElementById("chat-messages");
 			const messageInput = document.getElementById("message-input");
@@ -271,3 +362,4 @@
 		</script>
 	</body>
 </html>
+
